@@ -1,7 +1,7 @@
-**SPED Lesson Planner**
+# SPED Lesson Planner
 A comprehensive lesson planning platform designed specifically for Special Education (SPED) teachers to create, organize, and track lessons across all required curriculum areas.
 
-Overview
+## Overview
 The SPED Lesson Planner provides special education teachers with a centralized platform to plan and manage their lessons according to the seven core SPED curriculum areas:
 
 Communication and Language - Developing verbal and non-verbal communication skills
@@ -18,7 +18,7 @@ Arts - Creative expression through visual arts, music, drama, and dance
 
 Vocational Education - Preparing students for employment with job skills
 
-Features
+## Features
 Curriculum Dashboard: Color-coded overview of all curriculum areas with progress tracking
 
 Progress Monitoring: Visual progress bars to track completion of lessons in each curriculum

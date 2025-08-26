@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPED Lesson Planner</title>
+    <title>SPED Lesson Planner - Enhanced Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -17,6 +18,7 @@
             line-height: 1.6;
             color: #333;
             background-color: #f5f7fa;
+            transition: all 0.3s ease;
         }
         
         .container {
@@ -30,6 +32,9 @@
             color: white;
             padding: 1rem 0;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
         .header-content {
@@ -64,6 +69,12 @@
             text-decoration: none;
             font-weight: 600;
             transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        nav ul li a i {
+            margin-right: 8px;
         }
         
         nav ul li a:hover {
@@ -114,18 +125,34 @@
             font-weight: 600;
             border: none;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
         
         .btn:hover {
             background: #3a5a80;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #4a6fa5;
+            border: 1px solid #4a6fa5;
+        }
+        
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
         }
         
         .curriculum-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
         }
         
         .curriculum-card {
@@ -133,11 +160,13 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
+            transition: all 0.3s;
+            cursor: pointer;
         }
         
         .curriculum-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
         }
         
         .card-header {
@@ -145,6 +174,9 @@
             color: white;
             font-weight: 700;
             font-size: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .card-body {
@@ -169,13 +201,42 @@
             background-color: #4a6fa5;
         }
         
-        .communication { background-color: #3498db; }
-        .numeracy { background-color: #2ecc71; }
-        .daily-living { background-color: #e74c3c; }
-        .social-emotional { background-color: #f39c12; }
-        .physical { background-color: #9b59b6; }
-        .arts { background-color: #1abc9c; }
-        .vocational { background-color: #34495e; }
+        .stats {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .stats h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4a6fa5;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
         
         .recent-lessons {
             background: white;
@@ -199,6 +260,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: background 0.3s;
+        }
+        
+        .lesson-item:hover {
+            background: #f8f9fa;
         }
         
         .lesson-item:last-child {
@@ -214,12 +280,82 @@
             font-size: 0.9rem;
         }
         
+        .lesson-details {
+            display: none;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+        
+        .lesson-details.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .lesson-details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .lesson-details-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        .lesson-objectives, .lesson-materials {
+            margin-bottom: 1.5rem;
+        }
+        
+        .lesson-objectives h4, .lesson-materials h4 {
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+        
+        .back-to-dashboard {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: #4a6fa5;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .back-to-dashboard:hover {
+            text-decoration: underline;
+        }
+        
         footer {
             background-color: #2c3e50;
             color: white;
             text-align: center;
             padding: 2rem 0;
             margin-top: 3rem;
+        }
+        
+        .communication { background-color: #3498db; }
+        .numeracy { background-color: #2ecc71; }
+        .daily-living { background-color: #e74c3c; }
+        .social-emotional { background-color: #f39c12; }
+        .physical { background-color: #9b59b6; }
+        .arts { background-color: #1abc9c; }
+        .vocational { background-color: #34495e; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @media (max-width: 968px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         @media (max-width: 768px) {
@@ -230,6 +366,11 @@
             
             nav ul {
                 margin-top: 1rem;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 1rem;
             }
             
             .dashboard-header {
@@ -244,6 +385,14 @@
             .curriculum-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-details-content {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -256,10 +405,10 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#">Dashboard</a></li>
-                    <li><a href="#">My Lessons</a></li>
-                    <li><a href="#">Resources</a></li>
-                    <li><a href="#">Profile</a></li>
+                    <li><a href="#" class="nav-dashboard active"><i class="fas fa-th-large"></i> Dashboard</a></li>
+                    <li><a href="#" class="nav-lessons"><i class="fas fa-book"></i> My Lessons</a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
                 </ul>
             </nav>
         </div>
@@ -275,156 +424,413 @@
     <section class="dashboard container">
         <div class="dashboard-header">
             <h2 class="dashboard-title">Curriculum Dashboard</h2>
-            <a href="#" class="btn">Create New Lesson</a>
+            <a href="#" class="btn" id="create-lesson-btn"><i class="fas fa-plus"></i> Create New Lesson</a>
         </div>
 
-        <div class="curriculum-grid">
-            <div class="curriculum-card">
-                <div class="card-header communication">Communication and Language</div>
-                <div class="card-body">
-                    <p>Develop language skills, both verbal and non-verbal, for effective communication.</p>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 75%"></div>
-                    </div>
-                    <p>6 of 8 lessons completed</p>
-                    <a href="#" class="btn">View Lessons</a>
+        <div class="stats">
+            <h3>Teaching Overview</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">42</div>
+                    <div class="stat-label">Total Lessons</div>
                 </div>
-            </div>
-
-            <div class="curriculum-card">
-                <div class="card-header numeracy">Numeracy</div>
-                <div class="card-body">
-                    <p>Build foundational math skills and practical application of numeracy concepts.</p>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 50%"></div>
-                    </div>
-                    <p>4 of 8 lessons completed</p>
-                    <a href="#" class="btn">View Lessons</a>
+                <div class="stat-item">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Students</div>
                 </div>
-            </div>
-
-            <div class="curriculum-card">
-                <div class="card-header daily-living">Daily Living Skills</div>
-                <div class="card-body">
-                    <p>Teach essential life skills for independence and self-care.</p>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 30%"></div>
-                    </div>
-                    <p>3 of 10 lessons completed</p>
-                    <a href="#" class="btn">View Lessons</a>
+                <div class="stat-item">
+                    <div class="stat-number">78%</div>
+                    <div class="stat-label">Avg. Completion</div>
                 </div>
-            </div>
-
-            <div class="curriculum-card">
-                <div class="card-header social-emotional">Social-Emotional Learning</div>
-                <div class="card-body">
-                    <p>Develop emotional intelligence, self-regulation, and interpersonal skills.</p>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 60%"></div>
-                    </div>
-                    <p>6 of 10 lessons completed</p>
-                    <a href="#" class="btn">View Lessons</a>
-                </div>
-            </div>
-
-            <div class="curriculum-card">
-                <div class="card-header physical">Physical Education</div>
-                <div class="card-body">
-                    <p>Adapted physical activities to develop motor skills and promote health.</p>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 40%"></div>
-                    </div>
-                    <p>4 of 10 lessons completed</p>
-                    <a href="#" class="btn">View Lessons</a>
-                </div>
-            </div>
-
-            <div class="curriculum-card">
-                <div class="card-header arts">Arts</div>
-                <div class="card-body">
-                    <p>Creative expression through visual arts, music, drama, and dance.</p>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 25%"></div>
-                    </div>
-                    <p>2 of 8 lessons completed</p>
-                    <a href="#" class="btn">View Lessons</a>
-                </div>
-            </div>
-
-            <div class="curriculum-card">
-                <div class="card-header vocational">Vocational Education</div>
-                <div class="card-body">
-                    <p>Prepare students for employment with job skills and workplace readiness.</p>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 20%"></div>
-                    </div>
-                    <p>2 of 10 lessons completed</p>
-                    <a href="#" class="btn">View Lessons</a>
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Upcoming Lessons</div>
                 </div>
             </div>
         </div>
 
-        <div class="recent-lessons">
-            <h3>Recent Lessons</h3>
-            <ul class="lesson-list">
-                <li class="lesson-item">
-                    <div>
-                        <div class="lesson-title">Basic Sign Language Expressions</div>
-                        <div class="lesson-date">Communication and Language • Planned for May 15, 2025</div>
+        <div class="dashboard-grid">
+            <div class="curriculum-grid">
+                <div class="curriculum-card" data-curriculum="communication">
+                    <div class="card-header communication">
+                        <span>Communication and Language</span>
+                        <i class="fas fa-comments"></i>
                     </div>
-                    <a href="#" class="btn">Edit</a>
-                </li>
-                <li class="lesson-item">
-                    <div>
-                        <div class="lesson-title">Counting Money and Making Change</div>
-                        <div class="lesson-date">Numeracy • Taught on May 12, 2025</div>
+                    <div class="card-body">
+                        <p>Develop language skills, both verbal and non-verbal, for effective communication.</p>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 75%"></div>
+                        </div>
+                        <p>6 of 8 lessons completed</p>
+                        <a href="#" class="btn btn-secondary">View Lessons</a>
                     </div>
-                    <a href="#" class="btn">Review</a>
-                </li>
-                <li class="lesson-item">
-                    <div>
-                        <div class="lesson-title">Personal Hygiene Routine</div>
-                        <div class="lesson-date">Daily Living Skills • Planned for May 17, 2025</div>
+                </div>
+
+                <div class="curriculum-card" data-curriculum="numeracy">
+                    <div class="card-header numeracy">
+                        <span>Numeracy</span>
+                        <i class="fas fa-calculator"></i>
                     </div>
-                    <a href="#" class="btn">Edit</a>
-                </li>
-                <li class="lesson-item">
-                    <div>
-                        <div class="lesson-title">Recognizing Emotions in Others</div>
-                        <div class="lesson-date">Social-Emotional Learning • Taught on May 10, 2025</div>
+                    <div class="card-body">
+                        <p>Build foundational math skills and practical application of numeracy concepts.</p>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 50%"></div>
+                        </div>
+                        <p>4 of 8 lessons completed</p>
+                        <a href="#" class="btn btn-secondary">View Lessons</a>
                     </div>
-                    <a href="#" class="btn">Review</a>
-                </li>
-            </ul>
+                </div>
+
+                <div class="curriculum-card" data-curriculum="daily-living">
+                    <div class="card-header daily-living">
+                        <span>Daily Living Skills</span>
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="card-body">
+                        <p>Teach essential life skills for independence and self-care.</p>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 30%"></div>
+                        </div>
+                        <p>3 of 10 lessons completed</p>
+                        <a href="#" class="btn btn-secondary">View Lessons</a>
+                    </div>
+                </div>
+
+                <div class="curriculum-card" data-curriculum="social-emotional">
+                    <div class="card-header social-emotional">
+                        <span>Social-Emotional Learning</span>
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="card-body">
+                        <p>Develop emotional intelligence, self-regulation, and interpersonal skills.</p>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 60%"></div>
+                        </div>
+                        <p>6 of 10 lessons completed</p>
+                        <a href="#" class="btn btn-secondary">View Lessons</a>
+                    </div>
+                </div>
+
+                <div class="curriculum-card" data-curriculum="physical">
+                    <div class="card-header physical">
+                        <span>Physical Education</span>
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div class="card-body">
+                        <p>Adapted physical activities to develop motor skills and promote health.</p>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 40%"></div>
+                        </div>
+                        <p>4 of 10 lessons completed</p>
+                        <a href="#" class="btn btn-secondary">View Lessons</a>
+                    </div>
+                </div>
+
+                <div class="curriculum-card" data-curriculum="arts">
+                    <div class="card-header arts">
+                        <span>Arts</span>
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <div class="card-body">
+                        <p>Creative expression through visual arts, music, drama, and dance.</p>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 25%"></div>
+                        </div>
+                        <p>2 of 8 lessons completed</p>
+                        <a href="#" class="btn btn-secondary">View Lessons</a>
+                    </div>
+                </div>
+
+                <div class="curriculum-card" data-curriculum="vocational">
+                    <div class="card-header vocational">
+                        <span>Vocational Education</span>
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="card-body">
+                        <p>Prepare students for employment with job skills and workplace readiness.</p>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 20%"></div>
+                        </div>
+                        <p>2 of 10 lessons completed</p>
+                        <a href="#" class="btn btn-secondary">View Lessons</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-lessons">
+                <h3>Recent Lessons</h3>
+                <ul class="lesson-list">
+                    <li class="lesson-item" data-lesson="1">
+                        <div>
+                            <div class="lesson-title">Basic Sign Language Expressions</div>
+                            <div class="lesson-date">Communication and Language • Planned for May 15, 2023</div>
+                        </div>
+                        <a href="#" class="btn">View</a>
+                    </li>
+                    <li class="lesson-item" data-lesson="2">
+                        <div>
+                            <div class="lesson-title">Counting Money and Making Change</div>
+                            <div class="lesson-date">Numeracy • Taught on May 12, 2023</div>
+                        </div>
+                        <a href="#" class="btn">Review</a>
+                    </li>
+                    <li class="lesson-item" data-lesson="3">
+                        <div>
+                            <div class="lesson-title">Personal Hygiene Routine</div>
+                            <div class="lesson-date">Daily Living Skills • Planned for May 17, 2023</div>
+                        </div>
+                        <a href="#" class="btn">View</a>
+                    </li>
+                    <li class="lesson-item" data-lesson="4">
+                        <div>
+                            <div class="lesson-title">Recognizing Emotions in Others</div>
+                            <div class="lesson-date">Social-Emotional Learning • Taught on May 10, 2023</div>
+                        </div>
+                        <a href="#" class="btn">Review</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="lesson-details" id="lesson-details">
+            <a href="#" class="back-to-dashboard" id="back-to-dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+            
+            <div class="lesson-details-header">
+                <h3 id="detail-title">Basic Sign Language Expressions</h3>
+                <div>
+                    <span class="lesson-date" id="detail-date">Planned for May 15, 2023</span>
+                    <span class="lesson-curriculum communication" id="detail-curriculum" style="padding: 4px 8px; border-radius: 4px; color: white; font-size: 0.8rem;">Communication and Language</span>
+                </div>
+            </div>
+            
+            <div class="lesson-details-content">
+                <div>
+                    <div class="lesson-objectives">
+                        <h4>Learning Objectives</h4>
+                        <ul id="detail-objectives">
+                            <li>Students will learn 10 basic ASL signs for everyday communication</li>
+                            <li>Students will practice fingerspelling their names</li>
+                            <li>Students will engage in simple signed conversations with peers</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="lesson-materials">
+                        <h4>Materials Needed</h4>
+                        <ul id="detail-materials">
+                            <li>ASL flashcards with common phrases</li>
+                            <li>Mirrors for students to check their form</li>
+                            <li>Video examples of ASL conversations</li>
+                            <li>Name tags with fingerspelling guides</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="lesson-activities">
+                        <h4>Activities</h4>
+                        <ol id="detail-activities">
+                            <li>Introduction to ASL and its importance (10 min)</li>
+                            <li>Demonstration and practice of 10 basic signs (15 min)</li>
+                            <li>Fingerspelling practice with name tags (10 min)</li>
+                            <li>Paired conversations using learned signs (10 min)</li>
+                            <li>Review and reflection (5 min)</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="lesson-info">
+                        <h4>Lesson Information</h4>
+                        <p><strong>Duration:</strong> <span id="detail-duration">50 minutes</span></p>
+                        <p><strong>Group Size:</strong> <span id="detail-group-size">Small group (4 students)</span></p>
+                        <p><strong>IEP Goals Addressed:</strong></p>
+                        <ul id="detail-iep-goals">
+                            <li>COM.3.1: Use appropriate communication methods</li>
+                            <li>SOC.2.2: Engage in reciprocal interactions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="lesson-actions">
+                        <a href="#" class="btn" style="width: 100%; margin-bottom: 10px; text-align: center;"><i class="fas fa-edit"></i> Edit Lesson</a>
+                        <a href="#" class="btn btn-secondary" style="width: 100%; text-align: center;"><i class="fas fa-file-pdf"></i> Export as PDF</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <footer>
         <div class="container">
             <p>SPED Lesson Planner - Designed specifically for Special Education Teachers</p>
-            <p>© 2025 SPED Lesson Planner. All rights reserved.</p>
+            <p>© 2023 SPED Lesson Planner. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Simple JavaScript for demonstration purposes
         document.addEventListener('DOMContentLoaded', function() {
+            const lessonDetails = document.getElementById('lesson-details');
+            const backButton = document.getElementById('back-to-dashboard');
             const curriculumCards = document.querySelectorAll('.curriculum-card');
+            const lessonItems = document.querySelectorAll('.lesson-item');
+            const createLessonBtn = document.getElementById('create-lesson-btn');
             
-            curriculumCards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (!e.target.classList.contains('btn')) {
-                        const header = this.querySelector('.card-header');
-                        const curriculum = header.textContent;
-                        alert(`Viewing lessons for: ${curriculum}`);
+            // Sample lesson data
+            const lessons = {
+                1: {
+                    title: "Basic Sign Language Expressions",
+                    date: "Planned for May 15, 2023",
+                    curriculum: "Communication and Language",
+                    curriculumClass: "communication",
+                    objectives: [
+                        "Students will learn 10 basic ASL signs for everyday communication",
+                        "Students will practice fingerspelling their names",
+                        "Students will engage in simple signed conversations with peers"
+                    ],
+                    materials: [
+                        "ASL flashcards with common phrases",
+                        "Mirrors for students to check their form",
+                        "Video examples of ASL conversations",
+                        "Name tags with fingerspelling guides"
+                    ],
+                    activities: [
+                        "Introduction to ASL and its importance (10 min)",
+                        "Demonstration and practice of 10 basic signs (15 min)",
+                        "Fingerspelling practice with name tags (10 min)",
+                        "Paired conversations using learned signs (10 min)",
+                        "Review and reflection (5 min)"
+                    ],
+                    duration: "50 minutes",
+                    groupSize: "Small group (4 students)",
+                    iepGoals: [
+                        "COM.3.1: Use appropriate communication methods",
+                        "SOC.2.2: Engage in reciprocal interactions"
+                    ]
+                },
+                2: {
+                    title: "Counting Money and Making Change",
+                    date: "Taught on May 12, 2023",
+                    curriculum: "Numeracy",
+                    curriculumClass: "numeracy",
+                    objectives: [
+                        "Identify coins and bills and their values",
+                        "Count mixed collections of coins",
+                        "Make change for small purchases"
+                    ],
+                    materials: [
+                        "Play money (coins and bills)",
+                        "Visual aids showing money values",
+                        "Shopping scenario cards",
+                        "Calculators for students who need them"
+                    ],
+                    activities: [
+                        "Money identification warm-up (5 min)",
+                        "Direct instruction on counting money (10 min)",
+                        "Guided practice with mixed coins (15 min)",
+                        "Role-play shopping scenarios (15 min)",
+                        "Independent practice worksheet (5 min)"
+                    ],
+                    duration: "50 minutes",
+                    groupSize: "Individual instruction",
+                    iepGoals: [
+                        "MATH.4.2: Solve money-based problems",
+                        "DL.2.1: Demonstrate financial literacy skills"
+                    ]
+                }
+            };
+            
+            // Show lesson details when a lesson item is clicked
+            lessonItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const lessonId = this.getAttribute('data-lesson');
+                    const lesson = lessons[lessonId];
+                    
+                    if (lesson) {
+                        // Populate lesson details
+                        document.getElementById('detail-title').textContent = lesson.title;
+                        document.getElementById('detail-date').textContent = lesson.date;
+                        document.getElementById('detail-curriculum').textContent = lesson.curriculum;
+                        document.getElementById('detail-curriculum').className = `lesson-curriculum ${lesson.curriculumClass}`;
+                        
+                        // Populate objectives
+                        const objectivesList = document.getElementById('detail-objectives');
+                        objectivesList.innerHTML = '';
+                        lesson.objectives.forEach(obj => {
+                            const li = document.createElement('li');
+                            li.textContent = obj;
+                            objectivesList.appendChild(li);
+                        });
+                        
+                        // Populate materials
+                        const materialsList = document.getElementById('detail-materials');
+                        materialsList.innerHTML = '';
+                        lesson.materials.forEach(mat => {
+                            const li = document.createElement('li');
+                            li.textContent = mat;
+                            materialsList.appendChild(li);
+                        });
+                        
+                        // Populate activities
+                        const activitiesList = document.getElementById('detail-activities');
+                        activitiesList.innerHTML = '';
+                        lesson.activities.forEach(act => {
+                            const li = document.createElement('li');
+                            li.textContent = act;
+                            activitiesList.appendChild(li);
+                        });
+                        
+                        // Populate other details
+                        document.getElementById('detail-duration').textContent = lesson.duration;
+                        document.getElementById('detail-group-size').textContent = lesson.groupSize;
+                        
+                        // Populate IEP goals
+                        const iepList = document.getElementById('detail-iep-goals');
+                        iepList.innerHTML = '';
+                        lesson.iepGoals.forEach(goal => {
+                            const li = document.createElement('li');
+                            li.textContent = goal;
+                            iepList.appendChild(li);
+                        });
+                        
+                        // Show lesson details
+                        lessonDetails.classList.add('active');
+                        
+                        // Scroll to lesson details
+                        lessonDetails.scrollIntoView({ behavior: 'smooth' });
                     }
                 });
             });
             
-            const createLessonBtn = document.querySelector('.dashboard-header .btn');
+            // Hide lesson details when back button is clicked
+            backButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                lessonDetails.classList.remove('active');
+            });
+            
+            // Show create lesson form (simulated)
             createLessonBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                alert('Opening lesson creation form...');
+                alert('Create Lesson form would open here. This would allow you to create a new lesson plan across any of the curriculum areas.');
+            });
+            
+            // Curriculum card click handler
+            curriculumCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('btn')) {
+                        const curriculum = this.getAttribute('data-curriculum');
+                        const curriculumName = this.querySelector('.card-header span').textContent;
+                        alert(`Viewing all lessons for: ${curriculumName}\n\nThis would show a filtered view of lessons specifically for this curriculum area.`);
+                    }
+                });
+            });
+            
+            // Navigation click handlers
+            document.querySelector('.nav-dashboard').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('You are already on the Dashboard. This would refresh your dashboard view.');
+            });
+            
+            document.querySelector('.nav-lessons').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('This would navigate to the "My Lessons" section showing all your lessons in a list view with filtering options.');
             });
         });
     </script>
